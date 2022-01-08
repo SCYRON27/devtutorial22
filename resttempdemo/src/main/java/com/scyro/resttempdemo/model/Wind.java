@@ -1,7 +1,5 @@
 package com.scyro.resttempdemo.model;
 
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class WeatherResponse{
+public class Wind {
 	
-	
-	private Coordinates coord;
+	private double speed;
+    private long deg;
+    private double gust;
 
 }
