@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Coordinates{
-	
-	private double lon;
-	private double lat;
-	
+public class Sys {
+
+	private long type;
+	private long id;
+	private String message;
+	private String country;
+	private long sunrise;
+	private long sunset;
 
 }

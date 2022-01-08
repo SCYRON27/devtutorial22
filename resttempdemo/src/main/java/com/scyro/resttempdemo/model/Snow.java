@@ -1,17 +1,19 @@
 package com.scyro.resttempdemo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Coordinates{
+public class Snow {
 	
-	private double lon;
-	private double lat;
-	
+	@JsonProperty("1h")
+	private double _1h;
+	@JsonProperty("3h")
+	private double _3h;
 
 }
