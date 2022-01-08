@@ -23,7 +23,7 @@ public class RestempServiceImpl implements RestempService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-
+/*
 	@Override
 	public ResponseEntity<?> getDetails(String id) {
 
@@ -59,7 +59,7 @@ public class RestempServiceImpl implements RestempService {
 		}
 
 	}
-
+*/
 	@Override
 	public ResponseEntity<?> getWeather(String location) {
 

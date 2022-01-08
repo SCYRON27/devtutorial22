@@ -21,7 +21,8 @@ public class FirstController {
 	public String test() {
 		return "Producer API working";
 	}
-	
+
+/*	
 	@GetMapping("/fetchdetails/{id}")
 	public ResponseEntity<?> getDetails(@PathVariable String id) {
 		
@@ -37,7 +38,7 @@ public class FirstController {
 		return restempService.getAirlines();
 		
 	}
-	
+	*/
 	@GetMapping("/fetchweather")
 	public ResponseEntity<?> getWeather(@RequestParam String location){
 		
