@@ -10,58 +10,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scyro.resttempdemo.model.CustomResponse;
+import com.scyro.resttempdemo.exception.RestTempException;
+import com.scyro.resttempdemo.model.WeatherAPIResponse;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class RestempServiceImpl implements RestempService {
 
 	@Autowired
 	private RestTemplate restTemplate;
 	
-/*
-	@Override
-	public ResponseEntity<?> getDetails(String id) {
-
-		String url = "https://api.instantwebtools.net/v1/airlines/{id}";
-
-		ResponseEntity<Airline> response = restTemplate.exchange(url, HttpMethod.GET, null, Airline.class, id);
-
-		return response;
-	}
 
 	@Override
-	public ResponseEntity<?> getAirlines() {
-
-		String result = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_JSON);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.setSerializationInclusion(Include.NON_NULL);
-
-		String url = "https://api.instantwebtools.net/v1/airlines";
-
-		ResponseEntity<Airline[]> response = restTemplate.exchange(url, HttpMethod.GET, null, Airline[].class);
-
-		Airline[] airlines = response.getBody();
-
-		try {
-			result = mapper.writeValueAsString(airlines);
-			return new ResponseEntity<String>(result, responseHeaders, HttpStatus.OK);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new ResponseEntity<String>("Not getting a valid response", HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-
-	}
-*/
-	@Override
-	public ResponseEntity<?> getWeather(String location) {
+	public ResponseEntity<?> getWeather(String location) throws RestTempException {
 		
 		String result = null;
 		ObjectMapper mapper = new ObjectMapper();
@@ -78,8 +47,16 @@ public class RestempServiceImpl implements RestempService {
 		uriVariables.put("city_id", location);
 		uriVariables.put("API_key", "7a5a38723eeb35e627d650dcaf6b4642");
 		
-		ResponseEntity<CustomResponse> response = restTemplate.exchange(url, HttpMethod.GET,null,CustomResponse.class,uriVariables);
+		
+		ResponseEntity<WeatherAPIResponse> response;
+		try {
+			response = restTemplate.exchange(url, HttpMethod.GET,null,WeatherAPIResponse.class,uriVariables);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			throw new RestTempException("Not a valid city. Please provide valid city");
+		}
 //		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET,null,String.class,uriVariables);
+		
 		
 		System.out.println(response.getBody());
 		

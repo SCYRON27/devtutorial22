@@ -7,42 +7,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.scyro.resttempdemo.exception.RestTempException;
 import com.scyro.resttempdemo.service.RestempService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/restemp")
-public class FirstController {
+@Slf4j
+public class BaseController {
 	
 	@Autowired
 	private RestempService restempService;
-	
-	@GetMapping("/test")
-	public String test() {
-		return "Producer API working";
-	}
 
-/*	
-	@GetMapping("/fetchdetails/{id}")
-	public ResponseEntity<?> getDetails(@PathVariable String id) {
-		
-		
-		return restempService.getDetails(id);
-		
-	}
-	
-	@GetMapping("/fetchdetails")
-	public ResponseEntity<?> getAirlines() {
-		
-		
-		return restempService.getAirlines();
-		
-	}
-	*/
 	@GetMapping("/fetchweather")
-	public ResponseEntity<?> getWeather(@RequestParam String location){
+	public ResponseEntity<?> getWeather(@RequestParam String location) throws RestTempException{
+		log.info("Request param received:-  " +location);
 		
 		
-		return restempService.getWeather(location);
+		if(!location.isEmpty()) {
+			return restempService.getWeather(location);
+		}
+		else {
+			throw new RestTempException("Location field cannot be empty");
+			
+		}
+		
+		
+		
 	}
 
 }

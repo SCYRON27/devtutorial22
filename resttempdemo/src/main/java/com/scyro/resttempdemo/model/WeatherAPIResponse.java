@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class CustomResponse{
+public class WeatherAPIResponse{
 	
 	
 	private Coordinates coord;
