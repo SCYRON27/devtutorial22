@@ -2,14 +2,15 @@ package com.scyro.resttempdemo.model;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-public class WeatherAPIResponse{
-	
-	
+@JsonInclude(Include.NON_NULL)
+public class WeatherAPIResponse {
+
 	private Coordinates coord;
 	private List<Weather> weather;
 	private String base;
@@ -23,8 +24,7 @@ public class WeatherAPIResponse{
 	private Sys sys;
 	private long timezone;
 	private long id;
-    private String name;
-    private long cod;
-	
+	private String name;
+	private long cod;
 
 }

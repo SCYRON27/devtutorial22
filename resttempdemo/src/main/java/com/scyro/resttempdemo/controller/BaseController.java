@@ -8,20 +8,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scyro.resttempdemo.exception.RestTempException;
+import com.scyro.resttempdemo.model.CustomResponse;
 import com.scyro.resttempdemo.service.RestempService;
+import com.scyro.resttempdemo.util.Consts;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/restemp")
+@RequestMapping(Consts.baseURL)
 @Slf4j
 public class BaseController {
 	
 	@Autowired
 	private RestempService restempService;
 
-	@GetMapping("/fetchweather")
-	public ResponseEntity<?> getWeather(@RequestParam String location) throws RestTempException{
+	@GetMapping(Consts.subURL)
+	public ResponseEntity<CustomResponse> getWeather(@RequestParam String location) throws RestTempException{
 		log.info("Request param received:-  " +location);
 		
 		
