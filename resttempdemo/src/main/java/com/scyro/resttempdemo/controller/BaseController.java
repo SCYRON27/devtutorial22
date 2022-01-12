@@ -1,6 +1,7 @@
 package com.scyro.resttempdemo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,25 +19,22 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(Consts.baseURL)
 @Slf4j
 public class BaseController {
-	
+
 	@Autowired
 	private RestempService restempService;
 
 	@GetMapping(Consts.subURL)
-	public ResponseEntity<CustomResponse> getWeather(@RequestParam String location) throws RestTempException{
-		log.info("Request param received:-  " +location);
-		
-		
-		if(!location.isEmpty()) {
-			return restempService.getWeather(location);
-		}
-		else {
+	public ResponseEntity<CustomResponse> getWeather(@RequestParam String location) throws RestTempException {
+		log.info("Request param received:-  " + location);
+
+		if (!location.isEmpty()) {
+			CustomResponse customResponse = restempService.getWeather(location);
+			return new ResponseEntity<CustomResponse>(customResponse, HttpStatus.OK);
+		} else {
 			throw new RestTempException("Location field cannot be empty");
-			
+
 		}
-		
-		
-		
+
 	}
 
 }

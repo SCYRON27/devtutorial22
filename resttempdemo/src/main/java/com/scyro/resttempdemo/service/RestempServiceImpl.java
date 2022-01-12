@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,34 +24,54 @@ public class RestempServiceImpl implements RestempService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public ResponseEntity<CustomResponse> getWeather(String location) throws RestTempException {
+	public CustomResponse getWeather(String location) throws RestTempException {
 
-		CustomResponse customResponse = new CustomResponse();
+		return getFinalResponse(location);
+	}
 
+	@Override
+	public CustomResponse getFinalResponse(String location) throws RestTempException {
+
+		ResponseEntity<WeatherAPIResponse> response = getResponseWeatherAPI(location);
+
+		log.info("Response from weather API: - " + response.getBody().toString());
+
+		return getUpdatedResponse(response);
+
+	}
+
+	@Override
+	public ResponseEntity<WeatherAPIResponse> getResponseWeatherAPI(String location) throws RestTempException {
 
 		Map<String, String> uriVariables = new HashMap<>();
 
 		uriVariables.put(Consts.cityName, location);
 		uriVariables.put(Consts.APIKey, Consts.APIKeyValue);
 
-		ResponseEntity<WeatherAPIResponse> response;
 		try {
-			response = restTemplate.exchange(Consts.WeatherAPIURL, HttpMethod.GET, null, WeatherAPIResponse.class, uriVariables);
-			log.info("Response from weather API: - " + response.getBody().toString());
-			
-			
-			customResponse.setCityName(response.getBody().getName());
-			customResponse.setCountryCode(response.getBody().getSys().getCountry());
-			customResponse.setTempInCelsius(String.format("%.2f",response.getBody().getMain().getTemp() - 273.15) + " °C");
-			customResponse.setWeatherDescription(response.getBody().getWeather().get(0).getDescription());
-			
-			log.info("Response to User:- "+customResponse);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+			return restTemplate.exchange(Consts.WeatherAPIURL, HttpMethod.GET, null, WeatherAPIResponse.class,
+					uriVariables);
+		} catch (Exception exc) {
 			throw new RestTempException("Not a valid city. Please provide valid city");
 		}
 
-		return new ResponseEntity<CustomResponse>(customResponse,HttpStatus.OK);
+	}
+
+	@Override
+	public CustomResponse getUpdatedResponse(ResponseEntity<WeatherAPIResponse> responseWeather) {
+
+		CustomResponse customResponse = new CustomResponse();
+
+		customResponse.setCityName(responseWeather.getBody().getName());
+		customResponse.setCountryCode(responseWeather.getBody().getSys().getCountry());
+		customResponse.setTempInCelsius(
+				String.format("%.2f", responseWeather.getBody().getMain().getTemp() - 273.15) + " °C");
+		customResponse.setWeatherDescription(responseWeather.getBody().getWeather().get(0).getDescription());
+
+		log.info("Response to User:- " + customResponse);
+
+		return customResponse;
+
 	}
 
 }
