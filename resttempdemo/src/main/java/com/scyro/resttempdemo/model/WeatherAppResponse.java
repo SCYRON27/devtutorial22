@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @JsonInclude(Include.NON_NULL)
-public class CustomResponse {
+public class WeatherAppResponse {
 	
 	@JsonProperty("city")
 	private String cityName;

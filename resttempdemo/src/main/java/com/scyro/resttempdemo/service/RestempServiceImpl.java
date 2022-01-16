@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.scyro.resttempdemo.exception.RestTempException;
-import com.scyro.resttempdemo.model.CustomResponse;
+import com.scyro.resttempdemo.model.WeatherAppResponse;
 import com.scyro.resttempdemo.model.WeatherAPIResponse;
-import com.scyro.resttempdemo.util.Consts;
+import com.scyro.resttempdemo.util.Constants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,13 +24,13 @@ public class RestempServiceImpl implements RestempService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public CustomResponse getWeather(String location) throws RestTempException {
+	public WeatherAppResponse getWeather(String location) throws RestTempException {
 
 		return getFinalResponse(location);
 	}
 
 	@Override
-	public CustomResponse getFinalResponse(String location) throws RestTempException {
+	public WeatherAppResponse getFinalResponse(String location) throws RestTempException {
 
 		ResponseEntity<WeatherAPIResponse> response = getResponseWeatherAPI(location);
 
@@ -45,11 +45,11 @@ public class RestempServiceImpl implements RestempService {
 
 		Map<String, String> uriVariables = new HashMap<>();
 
-		uriVariables.put(Consts.cityName, location);
-		uriVariables.put(Consts.APIKey, Consts.APIKeyValue);
+		uriVariables.put(Constants.CITY_NAME, location);
+		uriVariables.put(Constants.API_KEY, Constants.API_KEY_VALUE);
 
 		try {
-			return restTemplate.exchange(Consts.WeatherAPIURL, HttpMethod.GET, null, WeatherAPIResponse.class,
+			return restTemplate.exchange(Constants.WEATHER_API_URL, HttpMethod.GET, null, WeatherAPIResponse.class,
 					uriVariables);
 		} catch (Exception exc) {
 			throw new RestTempException("Not a valid city. Please provide valid city");
@@ -58,9 +58,9 @@ public class RestempServiceImpl implements RestempService {
 	}
 
 	@Override
-	public CustomResponse getUpdatedResponse(ResponseEntity<WeatherAPIResponse> responseWeather) {
+	public WeatherAppResponse getUpdatedResponse(ResponseEntity<WeatherAPIResponse> responseWeather) {
 
-		CustomResponse customResponse = new CustomResponse();
+		WeatherAppResponse customResponse = new WeatherAppResponse();
 
 		customResponse.setCityName(responseWeather.getBody().getName());
 		customResponse.setCountryCode(responseWeather.getBody().getSys().getCountry());
